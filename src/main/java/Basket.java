@@ -1,11 +1,47 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.*;
 
 public class Basket {
-    private final String[] products;
-    private final int[] prices;
-    private final int[] count;
-
+    private String[] products;
+    private int[] prices;
+    private int[] count;
     private int sumProducts;
+
+    public String[] getProducts() {
+        return products;
+    }
+
+    public int[] getPrices() {
+        return prices;
+    }
+
+    public int[] getCount() {
+        return count;
+    }
+
+    public int getSumProducts() {
+        return sumProducts;
+    }
+
+    public void setSumProducts(int sumProducts) {
+        this.sumProducts = sumProducts;
+    }
+
+    public void setProducts(String[] products) {
+        this.products = products;
+    }
+
+    public void setPrices(int[] prices) {
+        this.prices = prices;
+    }
+
+    public void setCount(int[] count) {
+        this.count = count;
+    }
+
+    public Basket() {
+    }
 
     public Basket(String[] products, int[] prices) {
         this.products = products;
@@ -19,6 +55,7 @@ public class Basket {
         this.count = count;
         this.sumProducts = sumProducts;
     }
+
 
     public void printProducts() {
         for (int i = 0; i < products.length; i++) {
@@ -85,5 +122,15 @@ public class Basket {
             int sumProducts = Integer.parseInt(in.readLine());
             return new Basket(product, prices, count, sumProducts);
         }
+    }
+
+    public void saveJson(Basket basket) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(new File("json_dir/basket.json"), basket);
+    }
+
+    public static Basket loadFromJson() throws NullPointerException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(new File("json_dir/basket.json"), Basket.class);
     }
 }
