@@ -1,29 +1,23 @@
-import com.opencsv.CSVWriter;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
 
 public class ClientLog {
 
-    protected String[] values = {"productNum", "amount"};
-    protected List<String[]> log = new ArrayList<>();
+    protected File log;
 
-    public void log(int productNum, int amount) {
-        if (log.isEmpty()) {
-            log.add(values);
+    public void log(int productNum, int amount) throws Exception {
+        log = new File("log.txt");
+        try (FileWriter out = new FileWriter(log, true)) {
+            out.write((productNum + 1) + "," + amount + "\n");
         }
-        log.add(new String[]{String.valueOf(productNum + 1), String.valueOf(amount)});
     }
 
-    public void exportAsCSV() throws IOException {
-        try (CSVWriter writer = new CSVWriter(new FileWriter("csv_dir/log.csv", true),
-                CSVWriter.DEFAULT_SEPARATOR,
-                CSVWriter.NO_QUOTE_CHARACTER,
-                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                CSVWriter.RFC4180_LINE_END)) {
-            writer.writeAll(log);
+    public void exportAsCSV(File txtFile) throws IOException {
+        try (BufferedReader in = new BufferedReader(new FileReader(txtFile));
+             FileWriter outCsv = new FileWriter("log.csv")) {
+            outCsv.write("productNum,amount" + "\n");
+            while (in.ready()) {
+                outCsv.write(in.readLine() + "\n");
+            }
         }
     }
 }

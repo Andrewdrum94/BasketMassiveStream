@@ -36,7 +36,7 @@ public class Shop {
         String format = doc.getDocumentElement().getChildNodes().item(3).getChildNodes().item(5).getTextContent();
         if (bool.equals("true")) {
             if (format.equals("json")) {
-                basket.saveJson(basket);
+                basket.saveJson();
             } else {
                 basket.saveTxt(fileTxt);
             }
@@ -50,7 +50,7 @@ public class Shop {
 
         String bool = doc.getDocumentElement().getChildNodes().item(5).getChildNodes().item(1).getTextContent();
         if (bool.equals("true")) {
-            person1.exportAsCSV();
+            person1.exportAsCSV(person1.log);
         }
     }
 }

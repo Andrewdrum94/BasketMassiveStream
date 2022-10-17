@@ -2,7 +2,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 
-public class Basket {
+public class Basket implements Serializable {
     private String[] products;
     private int[] prices;
     private int[] count;
@@ -124,9 +124,9 @@ public class Basket {
         }
     }
 
-    public void saveJson(Basket basket) throws IOException {
+    public void saveJson() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File("json_dir/basket.json"), basket);
+        mapper.writeValue(new File("json_dir/basket.json"), this);
     }
 
     public static Basket loadFromJson() throws NullPointerException, IOException {
