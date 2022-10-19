@@ -2,7 +2,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 
-public class Basket implements Serializable {
+public class Basket {
     private String[] products;
     private int[] prices;
     private int[] count;
@@ -79,8 +79,8 @@ public class Basket implements Serializable {
         System.out.println("Итого: " + this.sumProducts + " руб");
     }
 
-    public void saveTxt(File textFile) throws Exception {
-        try (PrintWriter out = new PrintWriter(textFile)) {
+    public void saveTxt() throws Exception {
+        try (PrintWriter out = new PrintWriter("basket.txt")) {
             for (int i = 0; i < products.length; i++) {
                 if (i != (products.length - 1)) {
                     out.print(products[i] + " ");
@@ -106,8 +106,8 @@ public class Basket implements Serializable {
         }
     }
 
-    public static Basket loadFromTxtFile(File textFile) throws Exception {
-        try (BufferedReader in = new BufferedReader(new FileReader(textFile))) {
+    public static Basket loadFromTxtFile() throws Exception {
+        try (BufferedReader in = new BufferedReader(new FileReader("basket.txt"))) {
             String[] product = in.readLine().split(" ");
             String[] pricesString = in.readLine().split(" ");
             int[] prices = new int[pricesString.length];
@@ -126,11 +126,11 @@ public class Basket implements Serializable {
 
     public void saveJson() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File("json_dir/basket.json"), this);
+        mapper.writeValue(new File("basket.json"), this);
     }
 
     public static Basket loadFromJson() throws NullPointerException, IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new File("json_dir/basket.json"), Basket.class);
+        return mapper.readValue(new File("basket.json"), Basket.class);
     }
 }

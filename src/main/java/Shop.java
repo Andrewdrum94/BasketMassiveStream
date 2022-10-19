@@ -5,30 +5,30 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
 public class Shop {
-    static Basket load(File fileJson, File fileTxt, Basket basket) throws Exception {
+    static Basket load() throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new File("shop.xml"));
-        String bool = doc.getDocumentElement()
-                .getChildNodes()
-                .item(1).getChildNodes().item(1).getTextContent();
-
-        String format = doc.getDocumentElement().getChildNodes().item(1).getChildNodes().item(5).getTextContent();
+        String bool = doc.getDocumentElement().getChildNodes().item(1).getChildNodes().item(1).getTextContent();
+        String path = doc.getDocumentElement().getChildNodes().item(1).getChildNodes().item(3).getTextContent();
+        File fileJson, fileTxt;
         if (bool.equals("true")) {
-            if (format.equals("json")) {
+            if (path.equals("basket.json")) {
+                fileJson = new File(path);
                 if (fileJson.exists()) {
-                    basket = Basket.loadFromJson();
+                    return Basket.loadFromJson();
                 }
-            } else {
+            } else if (path.equals("basket.txt")) {
+                fileTxt = new File(path);
                 if (fileTxt.exists()) {
-                    basket = Basket.loadFromTxtFile(fileTxt);
+                    return Basket.loadFromTxtFile();
                 }
             }
         }
-        return basket;
+        return new Basket(new String[]{"Хлеб", "Яблоки", "Молоко"}, new int[]{50, 15, 70});
     }
 
-    static void save(File fileTxt, Basket basket) throws Exception {
+    static void save(Basket basket) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new File("shop.xml"));
@@ -38,7 +38,7 @@ public class Shop {
             if (format.equals("json")) {
                 basket.saveJson();
             } else {
-                basket.saveTxt(fileTxt);
+                basket.saveTxt();
             }
         }
     }

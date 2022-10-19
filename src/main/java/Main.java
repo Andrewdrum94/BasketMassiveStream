@@ -1,13 +1,10 @@
-import java.io.File;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        File fileJson = new File("json_dir/basket.json");
-        File fileTxt = new File("basket.txt");
         Scanner scanner = new Scanner(System.in);
-        Basket basket = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко"}, new int[]{50, 15, 70});
-        basket = Shop.load(fileJson, fileTxt, basket);
+        Basket basket;
+        basket = Shop.load();
         System.out.println("Список возможных товаров для покупки");
         basket.printProducts();
         ClientLog person1 = new ClientLog();
@@ -25,7 +22,7 @@ public class Main {
         }
         System.out.println("Ваша корзина:");
         basket.printCart();
-        Shop.save(fileTxt, basket);
+        Shop.save(basket);
         Shop.log(person1);
     }
 }
